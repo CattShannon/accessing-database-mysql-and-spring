@@ -1,0 +1,25 @@
+Notas de seguridad para produccion
+
+El siguiente comando revoca todos los privilegios del usuario asociado con la aplicación Spring:
+ mysql> revoke all on db_example.* from 'springuser'@'%';
+
+ Ahora la aplicación Spring no puede hacer nada en la base de datos.
+
+ La aplicación debe tener algunos privilegios, así que use el siguiente comando para otorgar los privilegios
+ mínimos que necesita la aplicación:
+  mysql> grant select, insert, delete, update on db_example.* to 'springuser'@'%';
+
+  Eliminar todos los privilegios y otorgar algunos privilegios le otorga a su aplicación Spring los
+  privilegios necesarios para realizar cambios solo en los datos de la base de datos y no en la estructura
+  (esquema).
+
+  Cuando desee realizar cambios en la base de datos:
+
+  Regrant permisos.
+
+  Cambie spring.jpa.hibernate.ddl-auto para update .
+
+  Vuelva a ejecutar sus aplicaciones.
+
+  Luego repita los dos comandos que se muestran aquí para hacer que su aplicación sea segura para su uso en
+  producción nuevamente. Mejor aún, use una herramienta de migración dedicada, como Flyway o Liquibase.
